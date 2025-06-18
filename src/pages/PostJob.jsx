@@ -10,7 +10,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../config"; // ✅ Externalized base URL
+import { API_BASE_URL } from "../api/config"; // ✅ Externalized base URL
 
 const PostJob = () => {
   const navigate = useNavigate();

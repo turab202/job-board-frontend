@@ -12,7 +12,7 @@ import {
   Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from "../config"; // Use config file
+import { API_BASE_URL } from "../api/config"; // Use config file
 
 const EmployerDashboard = () => {
   const [jobs, setJobs] = useState([]);

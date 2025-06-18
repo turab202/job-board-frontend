@@ -8,7 +8,7 @@ import {
   Alert,
   Box,
 } from "@mui/material";
-import { API_BASE_URL } from "../config"; // 🆕 Centralized API base URL
+import { API_BASE_URL } from "../api/config"; // 🆕 Centralized API base URL
 
 const Login = () => {
   const [email, setEmail] = useState("");

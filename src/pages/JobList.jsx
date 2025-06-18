@@ -1,14 +1,22 @@
-// src/components/JobList.jsx
 import React, { useState, useEffect } from "react";
-import { Container, Typography, TextField, Grid, Card, CardContent, Button } from "@mui/material";
+import {
+  Container,
+  Typography,
+  TextField,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+} from "@mui/material";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../api/config"; // 🆕 Centralized API config
 
 const JobList = () => {
   const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/jobs")
+    fetch(`${API_BASE_URL}/api/jobs`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
@@ -32,7 +40,7 @@ const JobList = () => {
       <TextField
         label="Search Jobs..."
         fullWidth
-        sx={{ mb: 2 }}
+        sx={{ mb: 3 }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
@@ -41,19 +49,36 @@ const JobList = () => {
         {filtered.length > 0 ? (
           filtered.map((job) => (
             <Grid item xs={12} sm={6} md={4} key={job._id}>
-              <Card>
+              <Card
+                sx={{
+                  height: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
                 <CardContent>
-                  <Typography variant="h6">{job.title}</Typography>
-                  <Typography color="textSecondary">{job.company}</Typography>
-                  <Typography>{job.location}</Typography>
-                  <Typography variant="body2" color="primary">
-                    {job.type}
+                  <Typography variant="h6" gutterBottom>
+                    {job.title}
                   </Typography>
+                  <Typography color="textSecondary">
+                    {job.company}
+                  </Typography>
+                  <Typography sx={{ mb: 1 }}>{job.location}</Typography>
+                  <Typography
+                    variant="body2"
+                    color="primary"
+                    fontWeight="bold"
+                  >
+                    {job.type || "N/A"}
+                  </Typography>
+
                   <Button
                     component={Link}
                     to={`/jobs/${job._id}`}
                     variant="contained"
                     sx={{ mt: 2 }}
+                    fullWidth
                   >
                     View Details
                   </Button>
@@ -62,7 +87,7 @@ const JobList = () => {
             </Grid>
           ))
         ) : (
-          <Typography variant="h6" color="textSecondary">
+          <Typography variant="h6" color="textSecondary" sx={{ mt: 4 }}>
             No jobs found
           </Typography>
         )}
@@ -72,11 +97,3 @@ const JobList = () => {
 };
 
 export default JobList;
-
-
-
-
-
-
-
-

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom"; // ✅ make sure both useParams and Link are imported
 import { Container, Typography, Card, CardContent, Button } from "@mui/material";
-import { API_BASE_URL } from "../config"; // ✅ import your base URL
+import { API_BASE_URL } from "../api/config"; // ✅ import your base URL
 const JobDetails = () => {
   const [job, setJob] = useState(null);
   const [error, setError] = useState(null);
