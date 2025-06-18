@@ -19,7 +19,7 @@ const Register = () => {
     setError("");
     
     try {
-      await axios.post(${API_BASE_URL}/api/auth/register, formData);
+      await axios.post(`${API_BASE_URL}/api/auth/register`, formData);
       setSnackbarMessage("Registration successful. Please login.");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
