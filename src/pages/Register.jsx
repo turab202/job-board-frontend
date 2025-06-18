@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
+import { API_BASE_URL } from "../api/config";
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
@@ -18,7 +19,7 @@ const Register = () => {
     setError("");
     
     try {
-      await axios.post("http://localhost:5000/api/auth/register", formData);
+      await axios.post(${API_BASE_URL}/api/auth/register, formData);
       setSnackbarMessage("Registration successful. Please login.");
       setSnackbarSeverity("success");
       setOpenSnackbar(true);
