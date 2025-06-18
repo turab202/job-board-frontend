@@ -8,11 +8,13 @@ import {
   Alert,
   Box,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../api/config"; // 🆕 Centralized API base URL
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -39,7 +41,7 @@ const Login = () => {
         });
         localStorage.setItem("token", data.token);
         setTimeout(() => {
-          window.location.href = "/dashboard";
+        navigate("/dashboard");
         }, 1500);
       } else {
         setSnackbar({
