@@ -10,24 +10,25 @@ import {
   TableBody,
   Box,
   Stack,
+  Link as MuiLink,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { API_BASE_URL } from "../api/config"; // Use config file
+import { API_BASE_URL } from "../api/config";
 
 const EmployerDashboard = () => {
   const [jobs, setJobs] = useState([]);
+  const [applications, setApplications] = useState([]);
 
   useEffect(() => {
-    const fetchJobs = async () => {
-      const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
+    const fetchJobs = async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/api/jobs/employer`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-
         const data = await res.json();
         setJobs(data);
       } catch (err) {
@@ -35,7 +36,22 @@ const EmployerDashboard = () => {
       }
     };
 
+    const fetchApplications = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/job-applications/employer/applications`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        setApplications(data);
+      } catch (err) {
+        console.error("Error fetching applications:", err);
+      }
+    };
+
     fetchJobs();
+    fetchApplications();
   }, []);
 
   const handleDelete = async (jobId) => {
@@ -55,7 +71,9 @@ const EmployerDashboard = () => {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Typography variant="h4">Employer Dashboard</Typography>
+      <Typography variant="h4" gutterBottom>
+        Employer Dashboard
+      </Typography>
 
       <Button
         component={Link}
@@ -67,22 +85,22 @@ const EmployerDashboard = () => {
         Post New Job
       </Button>
 
-      <Typography variant="h5" sx={{ mt: 3 }}>
+      {/* Jobs Section */}
+      <Typography variant="h5" sx={{ mt: 4 }}>
         Your Jobs
       </Typography>
 
-      {/* Responsive Table */}
       <Box sx={{ overflowX: "auto", mt: 2 }}>
-        <Table sx={{ minWidth: 600 }}>
+        <Table sx={{ minWidth: 300, tableLayout: "auto", wordWrap: "break-word" }}>
+
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
+              <TableCell >Title</TableCell>
               <TableCell>Company</TableCell>
               <TableCell>Location</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
-
           <TableBody>
             {jobs.map((job) => (
               <TableRow key={job._id}>
@@ -90,12 +108,7 @@ const EmployerDashboard = () => {
                 <TableCell>{job.company}</TableCell>
                 <TableCell>{job.location}</TableCell>
                 <TableCell>
-                  {/* Use Stack for responsive button layout */}
-                  <Stack
-                    direction={{ xs: "column", sm: "row" }}
-                    spacing={1}
-                    alignItems="flex-start"
-                  >
+                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems="stretch" sx={{ width: "100%" }} >
                     <Button
                       component={Link}
                       to={`/edit-job/${job._id}`}
@@ -110,6 +123,7 @@ const EmployerDashboard = () => {
                       variant="contained"
                       color="error"
                       size="small"
+                      
                     >
                       Delete
                     </Button>
@@ -117,6 +131,56 @@ const EmployerDashboard = () => {
                 </TableCell>
               </TableRow>
             ))}
+          </TableBody>
+        </Table>
+      </Box>
+
+      {/* Applications Section */}
+      <Typography variant="h5" sx={{ mt: 6 }}>
+        Job Applications
+      </Typography>
+
+      <Box sx={{ overflowX: "auto", mt: 2 }}>
+        <Table sx={{ minWidth: 700 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>Job Title</TableCell>
+              <TableCell>Applicant</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Resume</TableCell>
+              <TableCell>Cover Letter</TableCell>
+              <TableCell>Applied Date</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {Array.isArray(JOBS) && job.length > 0 ? (
+              applications.map((job) => (
+                <TableRow key={app._id}>
+                  <TableCell>{app.jobId?.title}</TableCell>
+                  <TableCell>{app.applicantName}</TableCell>
+                  <TableCell>{app.email}</TableCell>
+                  <TableCell>
+                    <MuiLink
+                      href={`https://job-board-backend-2-5014.onrender.com/${app.resume}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Download
+                    </MuiLink>
+                  </TableCell>
+                  <TableCell>{app.coverLetter || "N/A"}</TableCell>
+                  <TableCell>
+                    {new Date(app.appliedAt).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} >
+                  No applications yet.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </Box>

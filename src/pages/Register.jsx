@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, TextField, Button, Typography, Snackbar, Alert } from "@mui/material";
 import axios from "axios";
 import { API_BASE_URL } from "../api/config";
+import { useNavigate } from "react-router-dom"; 
 
 const Register = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
@@ -9,6 +10,7 @@ const Register = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("success");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,7 +24,11 @@ const Register = () => {
       await axios.post(`${API_BASE_URL}/api/auth/register`, formData);
       setSnackbarMessage("Registration successful. Please login.");
       setSnackbarSeverity("success");
-      setOpenSnackbar(true);
+     setOpenSnackbar(true);
+setTimeout(() => {
+  navigate("/login");
+}, 1500);
+
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
       setSnackbarMessage(err.response?.data?.message || "Something went wrong");
