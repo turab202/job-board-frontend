@@ -58,7 +58,7 @@ const JobApplication = () => {
 
   try {
     const response = await fetch(
-      `${API_BASE_URL}/api/jobs/${jobId}/apply`,
+      `${API_BASE_URL}/api/job-applications/${jobId}/apply`,
       {
         method: "POST",
         headers: {

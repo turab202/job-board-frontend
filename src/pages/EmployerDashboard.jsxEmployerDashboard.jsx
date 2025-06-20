@@ -11,6 +11,8 @@ import {
   Box,
   Stack,
   Link as MuiLink,
+  useMediaQuery,
+  useTheme
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../api/config";
@@ -18,6 +20,8 @@ import { API_BASE_URL } from "../api/config";
 const EmployerDashboard = () => {
   const [jobs, setJobs] = useState([]);
   const [applications, setApplications] = useState([]);
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm')); // Add this line
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -91,14 +95,13 @@ const EmployerDashboard = () => {
       </Typography>
 
       <Box sx={{ overflowX: "auto", mt: 2 }}>
-        <Table sx={{ minWidth: 300, tableLayout: "auto", wordWrap: "break-word" }}>
-
+        <Table sx={{ minWidth: 300 }}>
           <TableHead>
             <TableRow>
-              <TableCell >Title</TableCell>
+              <TableCell>Title</TableCell>
               <TableCell>Company</TableCell>
               <TableCell>Location</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ width: isSmallScreen ? '150px' : 'auto' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -108,13 +111,20 @@ const EmployerDashboard = () => {
                 <TableCell>{job.company}</TableCell>
                 <TableCell>{job.location}</TableCell>
                 <TableCell>
-                  <Stack direction={{ xs: "column", sm: "row" }} spacing={1} alignItems="stretch" sx={{ width: "100%" }} >
+                  <Stack 
+                    direction={isSmallScreen ? "column" : "row"} 
+                    spacing={1}
+                  >
                     <Button
                       component={Link}
                       to={`/edit-job/${job._id}`}
                       variant="contained"
                       color="warning"
                       size="small"
+                      sx={{ 
+                        whiteSpace: 'nowrap',
+                        minWidth: 'fit-content'
+                      }}
                     >
                       Edit
                     </Button>
@@ -123,7 +133,10 @@ const EmployerDashboard = () => {
                       variant="contained"
                       color="error"
                       size="small"
-                      
+                      sx={{
+                        whiteSpace: 'nowrap',
+                        minWidth: 'fit-content'
+                      }}
                     >
                       Delete
                     </Button>
@@ -153,15 +166,15 @@ const EmployerDashboard = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(JOBS) && job.length > 0 ? (
-              applications.map((job) => (
+            {Array.isArray(applications) && applications.length > 0 ? (
+              applications.map((app) => (
                 <TableRow key={app._id}>
                   <TableCell>{app.jobId?.title}</TableCell>
                   <TableCell>{app.applicantName}</TableCell>
                   <TableCell>{app.email}</TableCell>
                   <TableCell>
                     <MuiLink
-                      href={`https://job-board-backend-2-5014.onrender.com/${app.resume}`}
+                      href={`${API_BASE_URL}/uploads/${app.resume.replace('uploads/', '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -176,7 +189,7 @@ const EmployerDashboard = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} >
+                <TableCell colSpan={6}>
                   No applications yet.
                 </TableCell>
               </TableRow>

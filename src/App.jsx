@@ -11,7 +11,7 @@ import PostJob from "./pages/PostJob";
 import JobApplication from "./pages/JobApplication"; 
 import EmployerDashboard from "./pages/EmployerDashboard.jsxEmployerDashboard";
 import CandidateDashboard from "./pages/CandidateDashboard";
-
+import EditJobPage from "./pages/EditJobPage.jsx"
 
 const App = () => {
   return (
@@ -28,6 +28,7 @@ const App = () => {
         <Route path="/post-job" element={<PostJob />} />
         <Route path="/employer-dashboard" element={<EmployerDashboard />} />
         <Route path = "/candidate-dashboard" element ={<CandidateDashboard/>}/>
+        <Route path="/edit-job/:id" element={<EditJobPage />} />
 
       </Routes>
     </>
